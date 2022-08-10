@@ -20,15 +20,17 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - name: Deploy S3 Website
-        uses: danburtenshaw/s3-website-pr-action@v2
-        with:
-          bucket-prefix: "jyoti.js"
-          folder-to-copy: "./build"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
+      #- name: Deploy S3 Website
+        #uses: danburtenshaw/s3-website-pr-action@v2
+      #  with:
+      #    bucket-prefix: "jyoti.js"
+       #   folder-to-copy: "./build"
+       # env:
+       #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+       #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy app build to S3 bucket
+        run: aws s3 sync ./build/ s3://jyoti.js --delete
       - name: Build React App
         run: npm install && npm run build
       - name: Deploy message
@@ -41,5 +43,4 @@ jobs:
            Deploy preview ready!
            https://test.com/preview/${{ github.event.number }}
            built from ${{ github.sha }}
-     # - name: Deploy app build to S3 bucket
-     #   run: aws s3 sync ./build/ s3://jyoti.js --delete
+      
