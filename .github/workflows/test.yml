@@ -30,7 +30,7 @@ jobs:
        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy app build to S3 bucket
-        run: aws s3 sync ./build/ s3://jyoti.js --delete
+        run: aws s3 sync s3://jyoti.js --delete
       - name: Build React App
         run: npm install && npm run build
       - name: Deploy message
