@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+          static_web_app_url: ${{ steps.findpr.outputs.static_web_app_url }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -25,9 +27,5 @@ jobs:
         run: npm install && npm run build
       - uses: kceb/pull-request-url-action@v1
         id: findpr
-      - run: echo "Your PR is ${PR}"
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
       - name: Deploy app build to S3 bucket
         run: aws s3 sync ./build/ s3://jyoti.js --delete
