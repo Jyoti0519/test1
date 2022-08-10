@@ -30,5 +30,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
       - name: Build React App
         run: npm install && npm run build
+      - name: Deploy message
+        if: success()
+        uses: unsplash/comment-on-pr@master
+        env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+         msg:
+           Deploy preview ready!
+           https://jyoti.js/preview/${{ github.event.number }}
+           built from ${{ github.sha }}
      # - name: Deploy app build to S3 bucket
      #   run: aws s3 sync ./build/ s3://jyoti.js --delete
