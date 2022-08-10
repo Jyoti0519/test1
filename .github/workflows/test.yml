@@ -10,8 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-          static_web_app_url: ${{ steps.findpr.outputs.findpr }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -22,10 +20,15 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-           
+      - name: Deploy S3 Website
+        uses: danburtenshaw/s3-website-pr-action@v2
+        with:
+          bucket-prefix: "jyoti.js"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
       - name: Build React App
         run: npm install && npm run build
-      - uses: kceb/pull-request-url-action@v1
-        id: findpr
-      - name: Deploy app build to S3 bucket
-        run: aws s3 sync ./build/ s3://jyoti.js --delete
+     # - name: Deploy app build to S3 bucket
+     #   run: aws s3 sync ./build/ s3://jyoti.js --delete
